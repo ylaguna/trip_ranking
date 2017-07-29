@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20170729202252) do
 
   create_table "trip_places", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
-    t.string "url"
+    t.string "photo_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
