@@ -15,7 +15,7 @@ class TripPlace < ApplicationRecord
     end
 
     def score
-        self.votes.sum(:value)
+        self.votes.average(:value)
     end
 
 end
