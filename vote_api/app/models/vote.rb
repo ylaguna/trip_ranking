@@ -1,4 +1,4 @@
 class Vote < ApplicationRecord
     belongs_to :person
-    references :trip_place
+    belongs_to :trip_place
 end

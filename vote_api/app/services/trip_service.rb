@@ -19,7 +19,8 @@ module TripService
             raise person.errors if not person.valid?
             person.save
 
-            return { succeeded: true}
+            result = { personal: ScoreCalculator.get_personal(person), global: ScoreCalculator.get_global }
+            return { succeeded: true, result: result}
 
         rescue Exception => e
             return { succeeded: false, error_message: e.message }
@@ -28,15 +29,8 @@ module TripService
 
     def self.get_ranking
         begin
-
-            places = TripPlace.all.map do |place|
-                place.map_to_ranking
-            end
-
-            places = places.sort_by{|x| -x[:score]}
-
-            return { succeeded: true, result: places}
-
+            result = ScoreCalculator.get_global
+            return { succeeded: true, result: result}
 
         rescue Exception => e
             return { succeeded: false, error_message: e.message }
