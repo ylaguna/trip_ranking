@@ -33,5 +33,7 @@ module VoteApi
 
     config.autoload_paths += %W(#{config.root}/app/services)
     config.autoload_paths += %W(#{config.root}/app/models/validators)
+
+    config.action_controller.permit_all_parameters = true
   end
 end
