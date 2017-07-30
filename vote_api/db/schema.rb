@@ -27,11 +27,11 @@ ActiveRecord::Schema.define(version: 20170729202252) do
   end
 
   create_table "votes", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.bigint "person_id_id"
+    t.bigint "person_id"
     t.bigint "trip_place_id"
     t.integer "value"
     t.datetime "created_at"
-    t.index ["person_id_id"], name: "index_votes_on_person_id_id"
+    t.index ["person_id"], name: "index_votes_on_person_id"
     t.index ["trip_place_id"], name: "index_votes_on_trip_place_id"
   end
 

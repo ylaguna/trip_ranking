@@ -1,5 +1,5 @@
 class TripPlace < ApplicationRecord
-
+    has_many :votes
 
     def map_to_api
         return {

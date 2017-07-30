@@ -10,7 +10,7 @@ class TripController < ApplicationController
 
     # post 'api/trip/vote'
     def vote
-        vote_result = TripService.vote(permit_params)
+        vote_result = TripService.vote(person_params)
         render json: vote_result
     end
 
@@ -24,15 +24,13 @@ class TripController < ApplicationController
 
     private
 
-    def permit_params
-        params.permit(:name, :email, :votes)
+    def person_params
+       params.slice(:name, :email, :votes)
     end
 
     def validate_vote_params
-        person = Person.new(permit_params)
-        if !person.valid?
-          render :json => { error: person.errors }, :status => :bad_request and return
-        end
-
+        errors = []
+        errors << "Missing params" if person_params[:name].blank? || person_params[:email].blank? || person_params[:votes].blank?
+        render :json => { status: "Error", message: errors }, :status => :bad_request and return if errors.present?
     end
 end
