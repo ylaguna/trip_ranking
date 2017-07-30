@@ -29,5 +29,11 @@ module VoteApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+
+    config.autoload_paths += %W(#{config.root}/app/services)
+    config.autoload_paths += %W(#{config.root}/app/models/validators)
+
+    config.action_controller.permit_all_parameters = true
   end
 end
