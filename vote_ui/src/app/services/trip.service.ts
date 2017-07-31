@@ -3,7 +3,7 @@ import { Headers, Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { TripPlace } from './trip-place';
+import { TripPlace } from '../models/trip-place';
 
 @Injectable()
 export class TripService {

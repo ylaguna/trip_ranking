@@ -4,10 +4,11 @@ import { HttpModule }    from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
-import { AppComponent } from './app.component';
-import { HomeComponent }  from './home.component';
+import { AppComponent } from './components/app.component';
+import { HomeComponent }  from './components/home.component';
+import { VoteComponent }  from './components/vote.component';
 
-import { TripService } from './trip.service';
+import { TripService } from './services/trip.service';
 
 
 @NgModule({
@@ -19,6 +20,7 @@ import { TripService } from './trip.service';
   declarations: [
     AppComponent,
     HomeComponent,
+    VoteComponent,
   ],
   providers: [ TripService ],
   bootstrap: [AppComponent]

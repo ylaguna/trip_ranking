@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
-import { TripPlace } from './trip-place';
-import { TripService } from './trip.service';
+import { TripPlace } from '../models/trip-place';
+import { TripService } from '../services/trip.service';
 
 @Component({
   selector: 'home',
-  templateUrl: './home.component.html',
+  templateUrl: '../templates/home.component.html',
   // styleUrls: ['./app.component.css']
 })
 export class HomeComponent {
