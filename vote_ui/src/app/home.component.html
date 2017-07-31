@@ -1,10 +1,14 @@
 <table>
     <thead>
         <th>Name</th>
+        <!-- <th>Photo</th> -->
+        <th>Score</th>
     </thead>
     <tbody>
         <tr *ngFor="let place of places" >
             <td>{{place.name}}</td>
+            <!-- <td>{{place.photo_url}}</td> -->
+            <td>{{place.score}}</td>
         </tr>
     </tbody>
 </table>
