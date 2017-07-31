@@ -15,7 +15,7 @@ export class HomeComponent {
   constructor(private service: TripService) { }
 
   ngOnInit(): void {
-    this.service.getPlaces()
+    this.service.getRanking()
       .then(places => this.places = places);
   }
 }
