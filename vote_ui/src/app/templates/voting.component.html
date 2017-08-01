@@ -15,10 +15,46 @@
 {{valids}}
 </div>
 
-
-<div *ngIf="finished" style="margin-top: 50px;">
+<div *ngIf="isSending" style="margin-top: 50px;">
 
     Qual seu nome, amigo?
     <input [(ngModel)]="name" placeholder="name" />
     <button (click)="send()">Ok</button>
+</div>
+
+<div *ngIf="finished" style="margin-top: 50px;">
+    Aguarde....
+</div>
+
+<div *ngIf="ranking" style="margin-top: 50px;">
+<table>
+<thead>
+<th>Name</th>
+<!-- <th>Photo</th> -->
+<th>Score</th>
+</thead>
+<tbody>
+<tr *ngFor="let place of ranking.personal" >
+<td>{{place.name}}</td>
+<!-- <td>{{place.photo_url}}</td> -->
+<td>{{place.score}}</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<th>Name</th>
+<!-- <th>Photo</th> -->
+<th>Score</th>
+</thead>
+<tbody>
+<tr *ngFor="let place of ranking.global" >
+<td>{{place.name}}</td>
+<!-- <td>{{place.photo_url}}</td> -->
+<td>{{place.score}}</td>
+</tr>
+</tbody>
+</table>
+
 </div>

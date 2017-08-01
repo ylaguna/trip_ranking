@@ -6,6 +6,8 @@ import { TripService } from '../services/trip.service';
 
 
 import { LinqService } from 'ng2-linq';
+import { VoteService } from "../services/vote.service";
+import { PersonalRanking } from "../models/personal-ranking";
 
 
 @Component({
@@ -16,17 +18,19 @@ import { LinqService } from 'ng2-linq';
 })
 export class VoteComponent {
 
-  nameString : string = "";
+  name : string = "";
   placeOptions: PlaceChoice[] = [];
 
   leftPlace : PlaceChoice
   rightPlace : PlaceChoice
   valids : number
   isVoting : boolean;
+  isSending : boolean;
   finished : boolean;
 
+  ranking : PersonalRanking
 
-  constructor(private service: TripService, private linq: LinqService) { }
+  constructor(private service: TripService, private linq: LinqService, private vote_service: VoteService) { }
 
 
   ngOnInit(): void {
@@ -39,7 +43,7 @@ export class VoteComponent {
     this.isVoting = true;
 
     for (let place of places) {
-      place.score = 0;
+      place.score = 1;
       this.placeOptions.push( new PlaceChoice(place) );
     }
 
@@ -77,7 +81,7 @@ export class VoteComponent {
       }
     });
 
-    winner.place.score = winner.wins.length
+    winner.place.score = winner.wins.length + 1
 
     winner.games.push(looser.place.id)
     looser.games.push(winner.place.id)
@@ -85,7 +89,7 @@ export class VoteComponent {
     if(!this.checkFinished()){
       this.removeDefined();
      }else{
-       this.finished = true;
+       this.isSending = true;
        this.isVoting = false;
      }
   }
@@ -127,7 +131,13 @@ export class VoteComponent {
   }
 
   send() : void {
+    this.isSending = false;
+    this.finished = true;
 
+    this.vote_service
+          .sendVote(this.name, this.placeOptions)
+          .then(ranking => this.ranking = ranking)
+          .then(x => this.finished = false);
   }
 
 }

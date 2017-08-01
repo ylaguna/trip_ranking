@@ -10,6 +10,7 @@ import { HomeComponent }  from './components/home.component';
 import { VoteComponent }  from './components/vote.component';
 
 import { TripService } from './services/trip.service';
+import { VoteService } from "./services/vote.service";
 
 
 @NgModule({
@@ -24,7 +25,7 @@ import { TripService } from './services/trip.service';
     HomeComponent,
     VoteComponent,
   ],
-  providers: [ TripService ],
+  providers: [ TripService, VoteService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

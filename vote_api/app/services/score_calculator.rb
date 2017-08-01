@@ -1,7 +1,7 @@
 module ScoreCalculator
 
     def self.get_personal(person)
-        places = Person.last.votes.map do |vote|
+        places_list = Person.last.votes.map do |vote|
             trip_place = vote.trip_place.map_to_list
             trip_place[:score] = vote.value
             trip_place
