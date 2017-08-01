@@ -1,5 +1,6 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule }   from '@angular/forms';
 import { HttpModule }    from '@angular/http';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -14,6 +15,7 @@ import { TripService } from './services/trip.service';
 @NgModule({
   imports: [
     AppRoutingModule,
+    FormsModule,
     BrowserModule,
     HttpModule
   ],
