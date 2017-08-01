@@ -1,0 +1,60 @@
+<div *ngIf="isVoting" style="margin-top: 50px;">
+
+    <div *ngIf="leftPlace">
+        <button (click)="left()">Vote Left</button>
+        {{leftPlace.place.name}}
+        {{leftPlace.place.score}}
+    </div>
+
+    <div *ngIf="rightPlace">
+        <button (click)="right()">Vote Right</button>
+        {{rightPlace.place.name}}
+        {{rightPlace.place.score}}
+    </div>
+
+{{valids}}
+</div>
+
+<div *ngIf="isSending" style="margin-top: 50px;">
+
+    Qual seu nome, amigo?
+    <input [(ngModel)]="name" placeholder="name" />
+    <button (click)="send()">Ok</button>
+</div>
+
+<div *ngIf="finished" style="margin-top: 50px;">
+    Aguarde....
+</div>
+
+<div *ngIf="ranking" style="margin-top: 50px;">
+<table>
+<thead>
+<th>Name</th>
+<!-- <th>Photo</th> -->
+<th>Score</th>
+</thead>
+<tbody>
+<tr *ngFor="let place of ranking.personal" >
+<td>{{place.name}}</td>
+<!-- <td>{{place.photo_url}}</td> -->
+<td>{{place.score}}</td>
+</tr>
+</tbody>
+</table>
+
+<table>
+<thead>
+<th>Name</th>
+<!-- <th>Photo</th> -->
+<th>Score</th>
+</thead>
+<tbody>
+<tr *ngFor="let place of ranking.global" >
+<td>{{place.name}}</td>
+<!-- <td>{{place.photo_url}}</td> -->
+<td>{{place.score}}</td>
+</tr>
+</tbody>
+</table>
+
+</div>
