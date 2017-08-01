@@ -1,1 +1,17 @@
-Teste
+
+
+<div style="margin-top: 50px;">
+
+    <div *ngIf="leftPlace">
+        <button (click)="left()">Vote Left</button>
+        {{leftPlace.name}}
+        {{leftPlace.score}}
+    </div>
+
+    <div *ngIf="rightPlace">
+        <button (click)="right()">Vote Right</button>
+        {{rightPlace.name}}
+        {{rightPlace.score}}
+    </div>
+
+</div>

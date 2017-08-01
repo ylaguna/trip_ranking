@@ -3,6 +3,8 @@ import { Headers, Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
+import TripPlaceFactory from '../factory/trip-place.factory'
+
 import { TripPlace } from '../models/trip-place';
 
 @Injectable()
