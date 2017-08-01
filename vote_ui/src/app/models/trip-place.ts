@@ -1,6 +1,6 @@
 export class TripPlace {
   id: number;
   name: string;
-  photo_url: string;
+  PhotoUrl: string;
   score : number;
 }
