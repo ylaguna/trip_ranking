@@ -7,8 +7,8 @@ import VoteFactory from '../factory/vote.factory'
 
 import { TripPlace } from '../models/trip-place';
 import { PersonVote } from "../models/person-vote";
-import { PlaceChoice } from "../models/place-choice";
 import { PersonalRanking } from "../models/personal-ranking";
+import { PlaceOption } from "../models/place-option";
 
 @Injectable()
 export class VoteService {
@@ -16,7 +16,7 @@ export class VoteService {
   private headers = new Headers({'Content-Type': 'application/json'});
   constructor(private http: Http) { }
 
-  sendVote(name : string, place_options : PlaceChoice[]): Promise<PersonalRanking> {
+  sendVote(name : string, place_options : PlaceOption[]): Promise<PersonalRanking> {
     var person_vote = new PersonVote();
     person_vote.name = name;
     person_vote.email = "test@mail.com"
