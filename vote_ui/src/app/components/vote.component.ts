@@ -11,6 +11,7 @@ import { PersonalRanking } from "../models/personal-ranking";
 import { EmptyOption } from "../models/empty-option";
 
 import {RatingModule} from "ngx-rating";
+import { Person } from "../models/person";
 
 
 @Component({
@@ -21,8 +22,7 @@ import {RatingModule} from "ngx-rating";
 })
 export class VoteComponent {
 
-  name : string = "";
-  email: string = "";
+  person : Person = new Person();
 
   placeOptions: PlaceOption[] = [];
   maxGames : number;
@@ -70,7 +70,7 @@ export class VoteComponent {
     this.finished = true;
 
     this.vote_service
-          .sendVote(this.name, this.placeOptions)
+          .sendVote(this.person, this.placeOptions)
           .then(ranking => this.ranking = ranking)
           .then(x => this.finished = false);
   }

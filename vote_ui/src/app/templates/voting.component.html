@@ -13,8 +13,9 @@
 
 <div *ngIf="isSending" style="margin-top: 50px;">
 
-    Qual seu nome, amigo?
-    <input [(ngModel)]="name" placeholder="name" />
+    Quem é você, amigo?
+    <input [(ngModel)]="person.name" placeholder="name" />
+    <input [(ngModel)]="person.email" placeholder="email" />
     <button (click)="send()">Ok</button>
 </div>
 

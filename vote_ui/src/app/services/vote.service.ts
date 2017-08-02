@@ -9,6 +9,7 @@ import { TripPlace } from '../models/trip-place';
 import { PersonVote } from "../models/person-vote";
 import { PersonalRanking } from "../models/personal-ranking";
 import { PlaceOption } from "../models/place-option";
+import { Person } from "../models/person";
 
 @Injectable()
 export class VoteService {
@@ -16,10 +17,12 @@ export class VoteService {
   private headers = new Headers({'Content-Type': 'application/json'});
   constructor(private http: Http) { }
 
-  sendVote(name : string, place_options : PlaceOption[]): Promise<PersonalRanking> {
+  sendVote(person : Person, place_options : PlaceOption[]): Promise<PersonalRanking> {
     var person_vote = new PersonVote();
-    person_vote.name = name;
-    person_vote.email = "test@mail.com"
+
+    person_vote.name = person.name;
+    person_vote.email = person.email;
+
     person_vote.votes = VoteFactory(place_options);
 
     return this.http.post(this.voteUrl,
