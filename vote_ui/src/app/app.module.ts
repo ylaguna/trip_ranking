@@ -11,6 +11,7 @@ import { VoteComponent }  from './components/vote.component';
 
 import { TripService } from './services/trip.service';
 import { VoteService } from "./services/vote.service";
+import { RatingModule } from "ngx-rating";
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { VoteService } from "./services/vote.service";
     AppRoutingModule,
     FormsModule,
     BrowserModule,
-    HttpModule
+    HttpModule,
+    RatingModule
   ],
   declarations: [
     AppComponent,
