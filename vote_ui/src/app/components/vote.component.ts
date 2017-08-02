@@ -23,6 +23,7 @@ export class VoteComponent {
   email: string = "";
 
   placeOptions: PlaceOption[] = [];
+  maxGames : number;
   teste: number[] = [];
 
   leftPlace : PlaceOption
@@ -46,10 +47,9 @@ export class VoteComponent {
     this.isVoting = true;
 
     for (let place of places) {
-      place.score = 1;
       this.placeOptions.push( new PlaceOption(place) );
     }
-
+    this.maxGames = (this.placeOptions.length - 1);
 
     this.leftPlace = this.placeOptions[0];
     this.rightPlace = this.placeOptions[this.placeOptions.length - 1]
@@ -63,14 +63,17 @@ export class VoteComponent {
     this.vote(this.rightPlace, this.leftPlace)
   }
 
-  compute_single_game(winner : PlaceOption, looser : PlaceOption) : void {
-      winner.wins.push(looser);
-      winner.games.push(looser);
+  send() : void {
+    this.isSending = false;
+    this.finished = true;
 
-      looser.loses.push(winner);
-      looser.games.push(winner);
-
+    this.vote_service
+          .sendVote(this.name, this.placeOptions)
+          .then(ranking => this.ranking = ranking)
+          .then(x => this.finished = false);
   }
+
+
 
 
   vote(winner : PlaceOption, looser : PlaceOption) : void {
@@ -91,62 +94,69 @@ export class VoteComponent {
       }
     });
 
-    if( this.checkFinished() == false ){
-      this.removeDefined(winner);
-     }else{
+    if( this.checkFinished() ){
        this.isSending = true;
        this.isVoting = false;
      }
+      else{
+      this.changeOptions(winner);
+     }
+  }
+
+  compute_single_game(winner : PlaceOption, looser : PlaceOption) : void {
+      winner.wins.push(looser);
+      winner.games.push(looser);
+
+      looser.loses.push(winner);
+      looser.games.push(winner);
+  }
+
+  changeOptions(winner) : void {
+
+    const emptyOption = new EmptyOption();
+
+    // Se a opção da direita foi inválida, esvazia o item préviamente,
+    // evitanto o caso onde as duas opções já jogaram com todo mundo.
+
+    if( this.rightPlace.games.length < this.maxGames == false ) {
+      this.rightPlace = emptyOption;
+    }
+
+    if( this.leftPlace.games.length < this.maxGames == false || this.leftPlace == winner){
+      this.leftPlace = this.getOption(this.rightPlace)
+    }
+
+    if(this.rightPlace == emptyOption || this.rightPlace == winner){
+      this.rightPlace = this.getOption(this.leftPlace)
+    }
   }
 
   checkFinished() : boolean {
+    const maxGames = this.maxGames;
     const validOptionsCount = this.linq.Enumerable().From(this.placeOptions)
-    .Where(function(x : PlaceOption){
-      return x.games.length < 4
+    .Where(function(option: PlaceOption){
+      return option.games.length < maxGames
     }).Count()
 
     return validOptionsCount == 0
   }
 
-  removeDefined(winner) : void {
+  getOption(other_option : PlaceOption) : PlaceOption {
+    const maxGames = this.maxGames;
 
-    const emptyOption = new EmptyOption();
-
-    if(this.rightPlace.games.length == 4){
-      this.rightPlace = emptyOption;
-    }
-
-    if(this.leftPlace.games.length == 4 || this.leftPlace == winner){
-      this.leftPlace = this.getLast(this.rightPlace)
-    }
-
-    if(this.rightPlace == emptyOption || this.rightPlace.games.length == 4 || this.rightPlace == winner){
-      this.rightPlace = this.getLast(this.leftPlace)
-    }
-  }
-
-  getLast(other_place : PlaceOption) : PlaceOption {
     const placeOption = this.linq.Enumerable().From(this.placeOptions)
-    .Where(function(x : PlaceOption){
-      return x.games.includes(other_place) == false && x.place.id != other_place.place.id && x.games.length < 4
-    }).OrderBy(function (x : PlaceOption) {
-        return x.place.score
-    }).Select(function(x : PlaceOption){
-      return x;
+    .Where(function(option : PlaceOption){
+      return option.games.includes(other_option) == false && option.place.id != other_option.place.id && option.games.length < maxGames
+    }).OrderBy(function (option : PlaceOption) {
+        return option.place.score
+    }).Select(function(option : PlaceOption){
+      return option;
     }).First();
 
     return placeOption;
     // return validPlaces.sort(x => x.score)[0]
   }
 
-  send() : void {
-    this.isSending = false;
-    this.finished = true;
 
-    this.vote_service
-          .sendVote(this.name, this.placeOptions)
-          .then(ranking => this.ranking = ranking)
-          .then(x => this.finished = false);
-  }
 
 }
