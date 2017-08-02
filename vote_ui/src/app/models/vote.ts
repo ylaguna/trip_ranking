@@ -1,9 +1,9 @@
 import { TripPlace } from "./trip-place";
-import { PlaceChoice } from "./place-choice";
+import { PlaceOption } from "./place-option";
 
 export class Vote {
 
-  constructor(choice : PlaceChoice){
+  constructor(choice : PlaceOption){
     this.trip_place_id = choice.place.id
     this.value = choice.wins.length + 1
   }1

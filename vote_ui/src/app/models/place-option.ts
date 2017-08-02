@@ -1,8 +1,8 @@
 import { TripPlace } from "./trip-place";
 
-export class PlaceChoice {
+export class PlaceOption {
 
-  constructor(place : TripPlace = new TripPlace())
+  constructor(place : TripPlace)
   {
     this.place = place;
     this.games = [];
@@ -11,7 +11,7 @@ export class PlaceChoice {
   }
 
   place : TripPlace
-  games : PlaceChoice[]
-  wins : PlaceChoice[]
-  loses : PlaceChoice[]
+  games : PlaceOption[]
+  wins : PlaceOption[]
+  loses : PlaceOption[]
 }

@@ -1,31 +1,35 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { TripPlace } from '../models/trip-place';
-import { PlaceChoice } from '../models/place-choice';
+import { PlaceOption } from "../models/place-option";
 import { TripService } from '../services/trip.service';
 
 
 import { LinqService } from 'ng2-linq';
 import { VoteService } from "../services/vote.service";
 import { PersonalRanking } from "../models/personal-ranking";
+import { EmptyOption } from "../models/empty-option";
+
+import {RatingModule} from "ngx-rating";
+import { Person } from "../models/person";
 
 
 @Component({
   providers: [LinqService],
   selector: 'vote',
   templateUrl: '../templates/voting.component.html',
-  // styleUrls: ['./app.component.css']
+  styleUrls: ['../styles/voting.component.css']
 })
 export class VoteComponent {
 
-  name : string = "";
-  email: string = "";
+  person : Person = new Person();
 
-  placeOptions: PlaceChoice[] = [];
+  placeOptions: PlaceOption[] = [];
+  maxGames : number;
   teste: number[] = [];
 
-  leftPlace : PlaceChoice
-  rightPlace : PlaceChoice
+  leftPlace : PlaceOption
+  rightPlace : PlaceOption
 
   isVoting : boolean;
   isSending : boolean;
@@ -45,10 +49,9 @@ export class VoteComponent {
     this.isVoting = true;
 
     for (let place of places) {
-      place.score = 1;
-      this.placeOptions.push( new PlaceChoice(place) );
+      this.placeOptions.push( new PlaceOption(place) );
     }
-
+    this.maxGames = (this.placeOptions.length - 1);
 
     this.leftPlace = this.placeOptions[0];
     this.rightPlace = this.placeOptions[this.placeOptions.length - 1]
@@ -62,17 +65,20 @@ export class VoteComponent {
     this.vote(this.rightPlace, this.leftPlace)
   }
 
-  compute_single_game(winner : PlaceChoice, looser : PlaceChoice) : void {
-      winner.wins.push(looser);
-      winner.games.push(looser);
+  send() : void {
+    this.isSending = false;
+    this.finished = true;
 
-      looser.loses.push(winner);
-      looser.games.push(winner);
-
+    this.vote_service
+          .sendVote(this.person, this.placeOptions)
+          .then(ranking => this.ranking = ranking)
+          .then(x => this.finished = false);
   }
 
 
-  vote(winner : PlaceChoice, looser : PlaceChoice) : void {
+
+
+  vote(winner : PlaceOption, looser : PlaceOption) : void {
 
     this.compute_single_game(winner, looser);
 
@@ -90,61 +96,69 @@ export class VoteComponent {
       }
     });
 
-    if( this.checkFinished() == false ){
-      this.removeDefined(winner);
-     }else{
+    if( this.checkFinished() ){
        this.isSending = true;
        this.isVoting = false;
      }
+      else{
+      this.changeOptions(winner);
+     }
+  }
+
+  compute_single_game(winner : PlaceOption, looser : PlaceOption) : void {
+      winner.wins.push(looser);
+      winner.games.push(looser);
+
+      looser.loses.push(winner);
+      looser.games.push(winner);
+  }
+
+  changeOptions(winner) : void {
+
+    const emptyOption = new EmptyOption();
+
+    // Se a opção da direita foi inválida, esvazia o item préviamente,
+    // evitanto o caso onde as duas opções já jogaram com todo mundo.
+
+    if( this.rightPlace.games.length < this.maxGames == false ) {
+      this.rightPlace = emptyOption;
+    }
+
+    if( this.leftPlace.games.length < this.maxGames == false || this.leftPlace == winner){
+      this.leftPlace = this.getOption(this.rightPlace)
+    }
+
+    if(this.rightPlace == emptyOption || this.rightPlace == winner){
+      this.rightPlace = this.getOption(this.leftPlace)
+    }
   }
 
   checkFinished() : boolean {
+    const maxGames = this.maxGames;
     const validOptionsCount = this.linq.Enumerable().From(this.placeOptions)
-    .Where(function(x : PlaceChoice){
-      return x.games.length < 4
+    .Where(function(option: PlaceOption){
+      return option.games.length < maxGames
     }).Count()
 
     return validOptionsCount == 0
   }
 
-  removeDefined(winner) : void {
+  getOption(other_option : PlaceOption) : PlaceOption {
+    const maxGames = this.maxGames;
 
-    const emptyChoice = new PlaceChoice();
-    if(this.rightPlace.games.length == 4){
-      this.rightPlace = emptyChoice;
-    }
-
-    if(this.leftPlace.games.length == 4 || this.leftPlace == winner){
-      this.leftPlace = this.getLast(this.rightPlace)
-    }
-
-    if(this.rightPlace == emptyChoice || this.rightPlace.games.length == 4 || this.rightPlace == winner){
-      this.rightPlace = this.getLast(this.leftPlace)
-    }
-  }
-
-  getLast(other_place : PlaceChoice) : PlaceChoice {
     const placeOption = this.linq.Enumerable().From(this.placeOptions)
-    .Where(function(x : PlaceChoice){
-      return x.games.includes(other_place) == false && x.place.id != other_place.place.id && x.games.length < 4
-    }).OrderBy(function (x : PlaceChoice) {
-        return x.place.score
-    }).Select(function(x : PlaceChoice){
-      return x;
+    .Where(function(option : PlaceOption){
+      return option.games.includes(other_option) == false && option.place.id != other_option.place.id && option.games.length < maxGames
+    }).OrderBy(function (option : PlaceOption) {
+        return option.place.score
+    }).Select(function(option : PlaceOption){
+      return option;
     }).First();
 
     return placeOption;
     // return validPlaces.sort(x => x.score)[0]
   }
 
-  send() : void {
-    this.isSending = false;
-    this.finished = true;
 
-    this.vote_service
-          .sendVote(this.name, this.placeOptions)
-          .then(ranking => this.ranking = ranking)
-          .then(x => this.finished = false);
-  }
 
 }

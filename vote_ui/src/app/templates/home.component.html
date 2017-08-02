@@ -1,14 +1,24 @@
-<table>
-    <thead>
-        <th>Name</th>
-        <!-- <th>Photo</th> -->
-        <th>Score</th>
-    </thead>
-    <tbody>
-        <tr *ngFor="let place of places" >
-            <td>{{place.name}}</td>
-            <!-- <td>{{place.photo_url}}</td> -->
-            <td>{{place.score}}</td>
-        </tr>
-    </tbody>
-</table>
+<div class="container">
+    <div class="box">
+
+        <table>
+            <caption>Ranking Geral</caption>
+            <thead>
+                <th>Name</th>
+                <th>Score</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let place of places" >
+                    <td>{{place.name}}</td>
+                    <td>
+                        <rating [(ngModel)]="place.score"
+                                disabled=false>
+                        </rating>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
