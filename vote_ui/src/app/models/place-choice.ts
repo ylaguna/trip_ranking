@@ -7,9 +7,11 @@ export class PlaceChoice {
     this.place = place;
     this.games = [];
     this.wins = [];
+    this.loses = [];
   }
 
   place : TripPlace
-  games : number[]
-  wins : number[]
+  games : PlaceChoice[]
+  wins : PlaceChoice[]
+  loses : PlaceChoice[]
 }
