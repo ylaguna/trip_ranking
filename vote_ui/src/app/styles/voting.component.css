@@ -1,0 +1,21 @@
+.container{
+    display: flex;
+    margin-top: 50px;
+    width: 100%
+}
+
+.box{
+    width: 40%;
+    margin: 0 10% 0 10%;
+    height: 300px;
+    border: 2px solid black;
+
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+}
+
+.vote-button {
+    left: 40%;
+    position: relative;
+    width: 20%;
+}

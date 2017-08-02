@@ -15,7 +15,7 @@ import { EmptyOption } from "../models/empty-option";
   providers: [LinqService],
   selector: 'vote',
   templateUrl: '../templates/voting.component.html',
-  // styleUrls: ['./app.component.css']
+  styleUrls: ['../styles/voting.component.css']
 })
 export class VoteComponent {
 
