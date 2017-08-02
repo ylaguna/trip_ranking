@@ -11,9 +11,32 @@
         {{rightPlace.place.name}}
         {{rightPlace.place.score}}
     </div>
-
-{{valids}}
 </div>
+
+
+
+<table>
+    <thead>
+        <th>Id</th>
+        <th>Name</th>
+        <!-- <th>Photo</th> -->
+        <th>Score</th>
+        <th>Games</th>
+        <th>Wins</th>
+        <th>Looses</th>
+    </thead>
+    <tbody>
+        <tr *ngFor="let opt of placeOptions" >
+            <td>{{opt.place.id}}</td>
+            <td>{{opt.place.name}}</td>
+            <!-- <td>{{place.photo_url}}</td> -->
+            <td>{{opt.place.score}}</td>
+            <td>{{opt.games.length}}</td>
+             <td>{{opt.wins.length}}</td>
+             <td>{{opt.loses.length}}</td>
+        </tr>
+    </tbody>
+</table>
 
 <div *ngIf="isSending" style="margin-top: 50px;">
 

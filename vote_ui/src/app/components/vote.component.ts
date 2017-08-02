@@ -19,11 +19,14 @@ import { PersonalRanking } from "../models/personal-ranking";
 export class VoteComponent {
 
   name : string = "";
+  email: string = "";
+
   placeOptions: PlaceChoice[] = [];
+  teste: number[] = [];
 
   leftPlace : PlaceChoice
   rightPlace : PlaceChoice
-  valids : number
+
   isVoting : boolean;
   isSending : boolean;
   finished : boolean;
@@ -39,7 +42,6 @@ export class VoteComponent {
   }
 
   initialize(places: TripPlace[]) : void  {
-    this.valids = places.length;
     this.isVoting = true;
 
     for (let place of places) {
@@ -47,47 +49,49 @@ export class VoteComponent {
       this.placeOptions.push( new PlaceChoice(place) );
     }
 
+
     this.leftPlace = this.placeOptions[0];
     this.rightPlace = this.placeOptions[this.placeOptions.length - 1]
   }
 
   left() : void {
-    this.finish_game(this.leftPlace, this.rightPlace)
-
-    if(this.valids > 2)
-    {
-      this.leftPlace = this.getLast(this.rightPlace)
-    }
-
+    this.vote(this.leftPlace, this.rightPlace)
   }
 
   right() : void {
-    this.finish_game(this.rightPlace, this.leftPlace)
-    if(this.valids > 2)
-    {
-      this.rightPlace = this.getLast(this.leftPlace)
-    }
+    this.vote(this.rightPlace, this.leftPlace)
   }
 
-  finish_game(winner : PlaceChoice, looser : PlaceChoice) : void {
-    // winner.place.score ++;
+  compute_single_game(winner : PlaceChoice, looser : PlaceChoice) : void {
+      winner.wins.push(looser);
+      winner.games.push(looser);
+
+      looser.loses.push(winner);
+      looser.games.push(winner);
+
+  }
 
 
-    winner.wins.push(looser.place.id)
+  vote(winner : PlaceChoice, looser : PlaceChoice) : void {
+
+    this.compute_single_game(winner, looser);
 
     looser.wins.forEach(win => {
-      if(winner.wins.includes(win) == false){
-        winner.wins.push(win)
+      if(winner.games.includes(win) == false){
+        this.compute_single_game(winner, win);
       }
     });
 
-    winner.place.score = winner.wins.length + 1
+    //Se eu perder para um pais, significa que perderia para todos os paises que aquele pais perdeu...
+    // Se A ganha de B e eu perder para B, eu perderia de A
+    winner.loses.forEach(lose => {
+      if(looser.games.includes(lose) == false){
+        this.compute_single_game(lose, looser);
+      }
+    });
 
-    winner.games.push(looser.place.id)
-    looser.games.push(winner.place.id)
-
-    if(!this.checkFinished()){
-      this.removeDefined();
+    if( this.checkFinished() == false ){
+      this.removeDefined(winner);
      }else{
        this.isSending = true;
        this.isVoting = false;
@@ -100,18 +104,21 @@ export class VoteComponent {
       return x.games.length < 4
     }).Count()
 
-    this.valids = validOptionsCount;
-
     return validOptionsCount == 0
   }
 
-  removeDefined() : void {
+  removeDefined(winner) : void {
 
-    if(this.leftPlace.games.length == 4){
+    const emptyChoice = new PlaceChoice();
+    if(this.rightPlace.games.length == 4){
+      this.rightPlace = emptyChoice;
+    }
+
+    if(this.leftPlace.games.length == 4 || this.leftPlace == winner){
       this.leftPlace = this.getLast(this.rightPlace)
     }
 
-    if(this.rightPlace.games.length == 4){
+    if(this.rightPlace == emptyChoice || this.rightPlace.games.length == 4 || this.rightPlace == winner){
       this.rightPlace = this.getLast(this.leftPlace)
     }
   }
@@ -119,7 +126,7 @@ export class VoteComponent {
   getLast(other_place : PlaceChoice) : PlaceChoice {
     const placeOption = this.linq.Enumerable().From(this.placeOptions)
     .Where(function(x : PlaceChoice){
-      return x.games.includes(other_place.place.id) == false && x.place.id != other_place.place.id && x.games.length < 4
+      return x.games.includes(other_place) == false && x.place.id != other_place.place.id && x.games.length < 4
     }).OrderBy(function (x : PlaceChoice) {
         return x.place.score
     }).Select(function(x : PlaceChoice){
