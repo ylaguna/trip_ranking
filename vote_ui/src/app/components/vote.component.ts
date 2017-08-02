@@ -19,11 +19,14 @@ import { PersonalRanking } from "../models/personal-ranking";
 export class VoteComponent {
 
   name : string = "";
+  email: string = "";
+
   placeOptions: PlaceChoice[] = [];
+  teste: number[] = [];
 
   leftPlace : PlaceChoice
   rightPlace : PlaceChoice
-  valids : number
+
   isVoting : boolean;
   isSending : boolean;
   finished : boolean;
@@ -39,7 +42,6 @@ export class VoteComponent {
   }
 
   initialize(places: TripPlace[]) : void  {
-    this.valids = places.length;
     this.isVoting = true;
 
     for (let place of places) {
@@ -47,46 +49,36 @@ export class VoteComponent {
       this.placeOptions.push( new PlaceChoice(place) );
     }
 
+
     this.leftPlace = this.placeOptions[0];
     this.rightPlace = this.placeOptions[this.placeOptions.length - 1]
   }
 
   left() : void {
-    this.finish_game(this.leftPlace, this.rightPlace)
-
-    // if(this.valids > 2)
-    // {
-    //   this.leftPlace = this.getLast(this.rightPlace)
-    // }
-
+    this.vote(this.leftPlace, this.rightPlace)
   }
 
   right() : void {
-    this.finish_game(this.rightPlace, this.leftPlace)
-    // if(this.valids > 2)
-    // {
-    //   this.rightPlace = this.getLast(this.leftPlace)
-    // }
+    this.vote(this.rightPlace, this.leftPlace)
   }
 
-  finish_game(winner : PlaceChoice, looser : PlaceChoice) : void {
-    // winner.place.score ++;
+  compute_single_game(winner : PlaceChoice, looser : PlaceChoice) : void {
+      winner.wins.push(looser);
+      winner.games.push(looser);
+
+      looser.loses.push(winner);
+      looser.games.push(winner);
+
+  }
 
 
-    winner.wins.push(looser)
-    looser.loses.push(winner)
-    winner.games.push(looser)
-    looser.games.push(winner)
+  vote(winner : PlaceChoice, looser : PlaceChoice) : void {
+
+    this.compute_single_game(winner, looser);
 
     looser.wins.forEach(win => {
       if(winner.games.includes(win) == false){
-
-        winner.wins.push(win)
-        win.loses.push(winner)
-
-        winner.games.push(win)
-        win.games.push(winner)
-
+        this.compute_single_game(winner, win);
       }
     });
 
@@ -94,17 +86,9 @@ export class VoteComponent {
     // Se A ganha de B e eu perder para B, eu perderia de A
     winner.loses.forEach(lose => {
       if(looser.games.includes(lose) == false){
-
-        looser.loses.push(lose)
-        lose.wins.push(looser)
-
-        looser.games.push(lose)
-        lose.games.push(looser)
-
+        this.compute_single_game(lose, looser);
       }
     });
-
-
 
     if( this.checkFinished() == false ){
       this.removeDefined(winner);
@@ -120,18 +104,21 @@ export class VoteComponent {
       return x.games.length < 4
     }).Count()
 
-    this.valids = validOptionsCount;
-
     return validOptionsCount == 0
   }
 
   removeDefined(winner) : void {
 
+    const emptyChoice = new PlaceChoice();
+    if(this.rightPlace.games.length == 4){
+      this.rightPlace = emptyChoice;
+    }
+
     if(this.leftPlace.games.length == 4 || this.leftPlace == winner){
       this.leftPlace = this.getLast(this.rightPlace)
     }
 
-    if(this.rightPlace.games.length == 4 || this.rightPlace == winner){
+    if(this.rightPlace == emptyChoice || this.rightPlace.games.length == 4 || this.rightPlace == winner){
       this.rightPlace = this.getLast(this.leftPlace)
     }
   }

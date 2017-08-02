@@ -2,7 +2,7 @@ import { TripPlace } from "./trip-place";
 
 export class PlaceChoice {
 
-  constructor(place : TripPlace)
+  constructor(place : TripPlace = new TripPlace())
   {
     this.place = place;
     this.games = [];
