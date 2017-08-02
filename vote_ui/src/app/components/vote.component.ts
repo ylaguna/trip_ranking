@@ -10,6 +10,8 @@ import { VoteService } from "../services/vote.service";
 import { PersonalRanking } from "../models/personal-ranking";
 import { EmptyOption } from "../models/empty-option";
 
+import {RatingModule} from "ngx-rating";
+
 
 @Component({
   providers: [LinqService],

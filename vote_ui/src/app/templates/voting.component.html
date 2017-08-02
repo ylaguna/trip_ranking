@@ -1,12 +1,13 @@
+
+
 <div *ngIf="isVoting" class="container">
 
-    <div *ngIf="leftPlace" [ngStyle]="{'background-image': 'url(' + leftPlace.place.photo_url + ')'}" class="box">
+    <div *ngIf="leftPlace" [ngStyle]="{'background-image': 'url(' + leftPlace.place.photo_url + ')'}" class="box choice-div solid-box">
         <button (click)="left()" class="vote-button">{{leftPlace.place.name}}</button>
     </div>
 
-    <div *ngIf="rightPlace" [ngStyle]="{'background-image': 'url(' + rightPlace.place.photo_url + ')'}" class="box">
+    <div *ngIf="rightPlace" [ngStyle]="{'background-image': 'url(' + rightPlace.place.photo_url + ')'}" class="box choice-div solid-box">
         <button (click)="right()" class="vote-button">{{rightPlace.place.name}}</button>
-
     </div>
 </div>
 
@@ -21,35 +22,52 @@
     Aguarde....
 </div>
 
-<div *ngIf="ranking" style="margin-top: 50px;">
-<table>
-<thead>
-<th>Name</th>
-<!-- <th>Photo</th> -->
-<th>Score</th>
-</thead>
-<tbody>
-<tr *ngFor="let place of ranking.personal" >
-<td>{{place.name}}</td>
-<!-- <td>{{place.photo_url}}</td> -->
-<td>{{place.score}}</td>
-</tr>
-</tbody>
-</table>
 
-<table>
-<thead>
-<th>Name</th>
-<!-- <th>Photo</th> -->
-<th>Score</th>
-</thead>
-<tbody>
-<tr *ngFor="let place of ranking.global" >
-<td>{{place.name}}</td>
-<!-- <td>{{place.photo_url}}</td> -->
-<td>{{place.score}}</td>
-</tr>
-</tbody>
-</table>
+
+
+<div *ngIf="ranking" class="container">
+    <div class="box">
+
+        <table>
+            <caption>Ranking Pessoal</caption>
+            <thead>
+                <th>Name</th>
+                <th>Score</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let place of ranking.personal" >
+                    <td>{{place.name}}</td>
+                    <td>
+                        <rating [(ngModel)]="place.score"
+                                disabled=false>
+                        </rating>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="box">
+
+        <table>
+            <caption>Ranking Geral</caption>
+            <thead>
+                <th>Name</th>
+                <th>Score</th>
+            </thead>
+            <tbody>
+                <tr *ngFor="let place of ranking.global" >
+                    <td>{{place.name}}</td>
+                    <td>
+                        <rating [(ngModel)]="place.score"
+                                disabled=false>
+                        </rating>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
 
 </div>
