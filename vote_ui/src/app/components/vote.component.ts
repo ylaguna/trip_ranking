@@ -23,6 +23,7 @@ import { Person } from "../models/person";
 export class VoteComponent {
 
   person : Person = new Person();
+  invalid : boolean
 
   placeOptions: PlaceOption[] = [];
   maxGames : number;
@@ -66,13 +67,20 @@ export class VoteComponent {
   }
 
   send() : void {
-    this.isSending = false;
-    this.finished = true;
+    if(this.person.name.length > 0 && this.person.email.length > 0)
+    {
+      this.isSending = false;
+      this.finished = true;
 
-    this.vote_service
-          .sendVote(this.person, this.placeOptions)
-          .then(ranking => this.ranking = ranking)
-          .then(x => this.finished = false);
+      this.vote_service
+            .sendVote(this.person, this.placeOptions)
+            .then(ranking => this.ranking = ranking)
+            .then(x => this.finished = false);
+    }
+    else
+    {
+      this.invalid = true;
+    }
   }
 
 
