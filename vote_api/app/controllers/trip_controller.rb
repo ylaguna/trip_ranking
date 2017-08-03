@@ -29,8 +29,8 @@ class TripController < ApplicationController
     end
 
     def validate_vote_params
-        errors = []
-        errors << "Missing params" if person_params[:name].blank? || person_params[:email].blank? || person_params[:votes].blank?
+        errors = ""
+        errors = "Missing params" if person_params[:name].blank? || person_params[:email].blank? || person_params[:votes].blank?
         render :json => { status: "Error", message: errors }, :status => :bad_request and return if errors.present?
     end
 end
