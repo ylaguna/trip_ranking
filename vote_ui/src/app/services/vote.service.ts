@@ -11,9 +11,13 @@ import { PersonalRanking } from "../models/personal-ranking";
 import { PlaceOption } from "../models/place-option";
 import { Person } from "../models/person";
 
+import { environment } from "../../environments/environment";
+
+
+
 @Injectable()
 export class VoteService {
-  private voteUrl = 'http://localhost:3000/api/trip/vote';  // URL to web api
+  private voteUrl =  environment.serverUrl + '/api/trip/vote';  // URL to web api
   private headers = new Headers({'Content-Type': 'application/json'});
   constructor(private http: Http) { }
 

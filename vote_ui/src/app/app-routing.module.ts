@@ -5,7 +5,7 @@ import { HomeComponent }   from './components/home.component';
 import { VoteComponent }   from './components/vote.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: '', redirectTo: '/vote', pathMatch: 'full' },
   { path: 'home',  component: HomeComponent },
   { path: 'vote',  component: VoteComponent },
 ];

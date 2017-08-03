@@ -4,11 +4,13 @@ import { Headers, Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { TripPlace } from '../models/trip-place';
+import { environment } from "../../environments/environment";
+
 
 @Injectable()
 export class TripService {
-  private placesUrl = 'http://localhost:3000/api/trip/places';  // URL to web api
-  private rankingUrl = 'http://localhost:3000/api/trip/ranking';  // URL to web api
+  private placesUrl = environment.serverUrl + '/api/trip/places';
+  private rankingUrl = environment.serverUrl + '/api/trip/ranking';
 
   private headers = new Headers({'Content-Type': 'application/json'});
   constructor(private http: Http) { }
