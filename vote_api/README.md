@@ -1,24 +1,12 @@
-# README
+# vote-no-destino API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+API para o vote-no-destino
 
-Things you may want to cover:
 
-* Ruby version
+### Iniciando o Servidor
 
-* System dependencies
+Utilize o comando `rails s` para iniciar o servidor dev local. Este iniciará em `http://localhost:3000/`.
 
-* Configuration
+### Testes
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+Rode os testes atráves do comando `bundle exec rspec`
