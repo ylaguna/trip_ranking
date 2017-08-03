@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { TripPlace } from '../models/trip-place';
 import { TripService } from '../services/trip.service';
 
+
 @Component({
   selector: 'home',
   templateUrl: '../templates/home.component.html',
@@ -11,8 +12,12 @@ import { TripService } from '../services/trip.service';
 export class HomeComponent {
 
   places: TripPlace[] = [];
+  bla: number;
 
-  constructor(private service: TripService) { }
+  constructor(private service: TripService) {
+
+
+  }
 
   ngOnInit(): void {
     this.service.getRanking()
